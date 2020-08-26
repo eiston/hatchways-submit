@@ -1,0 +1,53 @@
+.item {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+img {
+    height: 8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 50%;
+    margin:1rem;
+    overflow: hidden;
+}
+.info {
+    padding: 1rem;
+    color:grey;
+    flex-grow: 1;
+}
+.topBar{
+    display: flex;
+}
+.name{
+    color: black;
+    font-size: 2rem;
+    font-weight: bold;
+    flex-grow: 1;
+}
+.expand{
+    font: 3rem monospace;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+.expand:hover{
+    color: black;
+}
+.test{
+    margin-top:1rem;
+}
+.tags{
+    margin-top:1rem;
+    margin-bottom: 1rem;
+    display:flex;
+    gap: 0.5rem;
+}
+.tag{
+    background-color:#e0e0e0;
+    padding:0.5rem;
+    border-radius: 0.5rem;
+}
+.add-tag-input{
+    width: 8rem;
+    padding: 0.5rem;
+}

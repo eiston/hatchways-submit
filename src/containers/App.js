@@ -1,51 +1,59 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import styled from "styled-components";
-import Article from "../components/Article";
-import Clap from "../components/Clap";
-import { fetchArticleDetails } from "../actions";
-
-const StyledApp = styled.div`
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-
-  aside {
-    min-width: 35vh;
-    display: flex;
-    justify-content: flex-end;
-  }
-  main {
-    flex: 1 0 350px;
-    ${"" /* not responsive */} padding: 0 5rem;
-  }
-`;
+import Student from "../components/Student"
+import { fetchStudentInfo } from "../actions";
+import './App.css';
 
 class App extends Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {name:'', tag:''};
+  }
+
+  handleSearch(e) {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const tag = e.target.tag.value;
+    this.setState({name:name, tag:tag});
+  }
   componentDidMount() {
-    this.props.fetchArticleDetails();
+    this.props.fetchStudentInfo();
   }
   render() {
-    const { title, subtitle, paragraphs } = this.props.data;
-    const countTotal = this.props.data.numberOfRecommends;
+    const {students} = this.props.data;
+    const {name, tag} = this.state;
+    let data = students && students.filter(item => {
+      if(!name || name.length === 0)return true;
+      else return (
+        item.firstName.toUpperCase().includes(name.toUpperCase()) || 
+        item.lastName.toUpperCase().includes(name.toUpperCase())
+      );
+    })
+    data = data && data.filter(item => {
+      if(!tag || tag.length === 0) return true;
+      else return (
+        item.tags && item.tags.includes(tag)
+      );
+    })
+
     return (
-      <StyledApp>
-        <aside>
-          <Clap countTotal={countTotal} />
-        </aside>
-        <main>
-          {this.props.isLoadingData ? (
+    <div className="app">
+      <form className="inputContainer" onSubmit={(e)=>this.handleSearch(e)}>
+        <input id="name-input" name="name" placeholder='Search by name'/>
+        <input id="tag-input" name="tag" placeholder='Search by tags'/>
+        <input className="filterSubmit" type='submit'/>
+      </form>
+      {this.props.isLoadingData ? (
             "Loading . . ."
           ) : (
-            <Article
-              title={title}
-              subtitle={subtitle}
-              paragraphs={paragraphs}
-            />
+            students && data.map(
+              (data, index) => (<div key={data.id}>
+              {index > 0 && <hr/>}
+              <Student id={data.id}  {...data}/>
+              </div>)
+            )
           )}
-        </main>
-      </StyledApp>
+    </div>
     );
   }
 }
@@ -57,6 +65,6 @@ const mapStateToProps = ({ data = {}, isLoadingData = false }) => ({
 export default connect(
   mapStateToProps,
   {
-    fetchArticleDetails
+    fetchStudentInfo
   }
 )(App);

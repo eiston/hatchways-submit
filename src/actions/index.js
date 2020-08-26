@@ -1,17 +1,22 @@
-import { SET_ARTICLE_DETAILS, API, FETCH_ARTICLE_DETAILS } from "./types";
-
-export function fetchArticleDetails() {
+import { SET_STUDENT_INFO, API, FETCH_STUDENT_INFO, SET_STUDENT_TAG } from "./types";
+export function addTag(payload) {
+  return {
+    type: SET_STUDENT_TAG,
+    payload: payload,
+  };
+}
+export function fetchStudentInfo() {
   return apiAction({
-    url: "https://api.myjson.com/bins/19dtxc",
-    onSuccess: setArticleDetails,
+    url: "https://www.hatchways.io/api/assessment/students",
+    onSuccess: setStudentInfo,
     onFailure: () => console.log("Error occured loading articles"),
-    label: FETCH_ARTICLE_DETAILS
+    label: FETCH_STUDENT_INFO
   });
 }
 
-function setArticleDetails(data) {
+function setStudentInfo(data) {
   return {
-    type: SET_ARTICLE_DETAILS,
+    type: SET_STUDENT_INFO,
     payload: data
   };
 }
@@ -26,6 +31,7 @@ function apiAction({
   label = "",
   headersOverride = null
 }) {
+  console.log(url)
   return {
     type: API,
     payload: {
